@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#3B8FF0"
+    tools:context=".LoginActivity">
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginVertical="140dp"
+        app:cardCornerRadius="20dp"
+        app:cardBackgroundColor="@color/white"
+
+        >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/Relative_Layout">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Login"
+                android:id="@+id/SignUp_TV"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="25dp"
+                android:textStyle="bold"
+                android:textSize="32sp"
+                android:textColor="@color/black"
+
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Enter Detail"
+                android:id="@+id/Credential_title"
+                android:layout_below="@id/SignUp_TV"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+
+                />
+
+
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:id="@+id/Email_ET"
+                android:layout_below="@id/Credential_title"
+                android:layout_marginTop="20dp"
+                android:layout_marginHorizontal="20dp"
+                android:hint="Email"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/black"
+                android:background="@drawable/edit_text_bg"
+                android:paddingStart="20dp"
+                />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:id="@+id/Password_ET"
+                android:layout_below="@id/Email_ET"
+                android:layout_margin="20dp"
+                android:hint="Password"
+                android:inputType="numberPassword"
+                android:textColor="@color/black"
+                android:background="@drawable/edit_text_bg"
+                android:paddingStart="20dp"
+                />
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:id="@+id/login_btn_id"
+                android:layout_below="@id/Password_ET"
+                android:layout_marginHorizontal="20dp"
+                app:backgroundTint="@null"
+                android:background="@drawable/btn_bg"
+                android:text="Login"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/signUp_opt_tv"
+                android:layout_below="@id/login_btn_id"
+                android:text="not_registered"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/black"
+                android:layout_marginTop="20dp"
+
+                />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:id="@+id/SignUP_btn_id"
+                android:layout_marginHorizontal="20dp"
+                android:layout_below="@id/signUp_opt_tv"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="30dp"
+                app:backgroundTint="@null"
+                android:background="@drawable/login_btn_bg"
+                android:text="Sign_Up"
+                android:textColor="#3B8FF0"
+                android:textSize="20sp"
+
+                />
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>
