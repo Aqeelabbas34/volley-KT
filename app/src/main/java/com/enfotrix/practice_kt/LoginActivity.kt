@@ -6,6 +6,10 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.android.volley.RequestQueue
+import com.android.volley.Response
+import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.Volley
 import com.enfotrix.practice_kt.databinding.ActivityLoginBinding
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
@@ -13,6 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import org.json.JSONObject
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
@@ -25,58 +30,45 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
         binding.apply {
             loginBtnId.setOnClickListener {
-                val enteredMail = EmailET.text.toString()
+                val enteredPhone = phoneET.text.toString()
                 val enteredPass = PasswordET.text.toString()
-                lifecycleScope.launch { userAuth(enteredMail, enteredPass) }
+                lifecycleScope.launch {
+                    loginHandler(ModelUser(firstName = "", lastName = "", phone = enteredPhone, password = enteredPass, cPass = ""))
+                }
             }
         }
     }
+    private  suspend fun loginHandler(user: ModelUser) {
+       withContext(Dispatchers.IO){
+           try {
+               val url = "https://cricdex.enfotrix.com/api/login"
 
-    private suspend fun userAuth(mail: String, pass: String) {
-        try {
-            val querySnapshot = withContext(Dispatchers.IO) {
-                db.collection("User")
-                    .whereEqualTo("email", mail)
-                    .get()
-                    .await()
-            }
-            if (!querySnapshot.isEmpty) {
-                for (document in querySnapshot) {
-                    val modelUser = document.toObject(ModelUser::class.java)
-                    if (modelUser.password == pass) {
-                        withContext(Dispatchers.Main)
-                        {
-                            Toast.makeText(
-                                this@LoginActivity,
-                                "Login successFull",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-                        }
-                        return
-                    } else {
-                        withContext(Dispatchers.Main) {
-                            Toast.makeText(this@LoginActivity, "Login Failed", Toast.LENGTH_SHORT)
-                                .show()
-                        }
-                        return
-                    }
+               val jsonBody = JSONObject().apply {
+                   put("phone_number", user.phone)
+                   put("password", user.password)
+               }
 
-                }
-
-            } else {
-                withContext(Dispatchers.Main) {
-
-                    Toast.makeText(this@LoginActivity, "No user found", Toast.LENGTH_SHORT).show()
-
-                }
-            }
+               val jsonObjectRequest =
+                   object : JsonObjectRequest(Method.POST, url, jsonBody, Response.Listener {
+                       Toast.makeText(this@LoginActivity, "Success", Toast.LENGTH_SHORT).show()
+                       startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                   }, Response.ErrorListener {
+                       Toast.makeText(this@LoginActivity, "error listener", Toast.LENGTH_SHORT).show()
+                   }) {
+                       override fun getHeaders(): Map<String, String> {
+                           val headers = HashMap<String, String>()
+                           headers["Content-Type"] = "application/json" // Set content type to JSON
+                           return headers
+                       }
+                   }
+               val requestQueue = Volley.newRequestQueue(this@LoginActivity)
+               requestQueue.add(jsonObjectRequest)
 
 
-        }catch (e:Exception){
-            withContext(Dispatchers.Main){
-                Toast.makeText(this@LoginActivity,"Error While Fetching data",Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
+
+           }catch (e:Exception){
+               Toast.makeText(this@LoginActivity,"Error occurred",Toast.LENGTH_SHORT).show()
+           }
+           }
+       }
 }
